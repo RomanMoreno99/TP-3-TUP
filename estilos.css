@@ -82,7 +82,7 @@ body {
     padding: 20px;
     text-align: center;
     background: linear-gradient(90deg, #f0f7ff, #fff);
-    border-bottom: 1px solid #e6eef8;
+    border-bottom: 1px solid #4771a3;
 }
 
 .site-header a {
@@ -188,4 +188,125 @@ main {
     color: var(--muted);
     padding: 12px;
     text-align: center;
+}
+
+:root {
+    --bg: #f5f7fb;
+    --card: #fff;
+    --accent: #2563eb;
+    --muted: #6b7280;
+    --gap: 12px;
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    background: var(--bg);
+    color: #111
+}
+
+.header {
+    padding: 14px;
+    text-align: center;
+    background: #fff;
+    border-bottom: 1px solid #e6eef8
+}
+
+.header a {
+    color: var(--accent);
+    text-decoration: none
+}
+
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 0 16px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap
+}
+
+.cardd {
+    background: var(--card);
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(2, 6, 23, 0.06);
+    flex: 1 1 400px;
+    min-width: 280px
+}
+
+.row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px
+}
+
+.row input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #e2eefc
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+.btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer
+}
+
+.btn.secondary {
+    background: #6b7280
+}
+
+.btn.small {
+    padding: 6px 8px;
+    font-size: 13px
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px
+}
+
+th,
+td {
+    padding: 8px;
+    border-bottom: 1px solid #f1f6ff;
+    text-align: left
+}
+
+.empty {
+    color: var(--muted);
+    text-align: center
+}
+
+.footer {
+    text-align: center;
+    padding: 12px;
+    color: var(--muted);
+    font-size: 13px
+}
+
+@media(max-width:600px) {
+    .row {
+        flex-direction: column
+    }
+
+    .container {
+        padding: 0 10px
+    }
 }
