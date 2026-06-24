@@ -1,203 +1,123 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ejercicio 1 - Flexbox y JS</title>
-    <link rel="stylesheet" href="estilos.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ejercicio 1 - Flexbox</title>
+  <link rel="stylesheet" href="estilos.css" />
 </head>
+<body class="page">
+  <header class="site-header">
+    <h1>Ejercicio 1 — Flexbox</h1>
+    <nav><a href="index.html">← Volver al índice</a></nav>
+  </header>
 
-<body>
-    <header class="site-header">
-        <h1>Ejercicio 1 </h1>
-        <p>Maquetación con Flexbox y elementos generados dinámicamente</p>
-        <nav><a href="index.html"> Volver al índice</a></nav>
-    </header>
+  <main class="container">
+    <section class="panel">
+      <h2>Controles</h2>
+      <div class="controls">
+        <button id="toggleHighlight" class="button">Alternar resaltado</button>
+        <button id="sortValue" class="button secondary">Ordenar por valor</button>
+        <label style="margin-left:8px">Filtrar categoría:</label>
+        <select id="filterCategory" class="input">
+          <option value="all">Todas</option>
+        </select>
+      </div>
+      <p class="legend">El contenedor de tarjetas usa display:flex y flex-wrap para ajustarse.</p>
+    </section>
 
-    <main>
-        <div class="controls" aria-hidden="false">
-            <button id="toggleHighlight" class="button">Alternar resaltado</button>
-            <button id="sortTitle" class="button secondary">Ordenar por título ↑/↓</button>
-            <button id="sortValue" class="button secondary">Ordenar por valor ↑/↓</button>
+    <section class="panel">
+      <h2>Tarjetas generadas</h2>
+      <div id="cardsContainer" class="cards" aria-live="polite"></div>
+      <div id="emptyMessage" class="no-results" style="display:none">No hay elementos.</div>
+    </section>
+  </main>
 
-            <label for="filterCategory" style="margin-left:8px;color:#333">Filtrar:</label>
-            <select id="filterCategory" class="input">
-                <option value="all">Todas</option>
-            </select>
+  <footer class="site-footer">Flexbox • JS básico • DOM</footer>
 
-            <button id="resetBtn" class="button" style="margin-left:auto">Restablecer vista</button>
-        </div>
+  <script>
+    // variables y arreglo (>=6 elementos)
+    let highlighted = false;
+    let valueAsc = true;
+    const items = [
+      {id:1, title:'Alfa', category:'A', value:12},
+      {id:2, title:'Beta', category:'B', value:7},
+      {id:3, title:'Gamma', category:'A', value:21},
+      {id:4, title:'Delta', category:'C', value:5},
+      {id:5, title:'Epsilon', category:'B', value:14},
+      {id:6, title:'Zeta', category:'C', value:9},
+      {id:7, title:'Eta', category:'A', value:18},
+      {id:8, title:'Theta', category:'B', value:3}
+    ];
+    let viewItems = [...items];
 
-        <div class="flex-layout">
-            <!-- Panel informativo -->
-            <section class="panel" aria-label="Información">
-                <h2>Panel de control</h2>
-                <p>Prueba a ordenar, filtrar o alternar el resaltado para ver cambios en la vista.</p>
-                <p class="legend">lore ipsum dolor sit amet.</p>
-            </section>
+    const cardsContainer = document.getElementById('cardsContainer');
+    const emptyMessage = document.getElementById('emptyMessage');
+    const filterSelect = document.getElementById('filterCategory');
 
-            <!-- Panel con tarjetas generado por JavaScript -->
-            <section class="panel" aria-label="Tarjetas generadas">
-                <h2>Tarjetas</h2>
-                <div id="cardsContainer" class="cards" role="list">
-                </div>
-                <div id="emptyMessage" class="no-results" style="display:none">No hay elementos que coincidan.</div>
-            </section>
-        </div>
-    </main>
+    function initFilterOptions(){
+      const cats = Array.from(new Set(items.map(i => i.category))).sort();
+      cats.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = 'Cat ' + cat;
+        filterSelect.appendChild(opt);
+      });
+    }
 
-    <footer style="text-align:center;padding:16px;color:#666;font-size:14px;">Se reservan derechos de autor - 2026®</footer>
+    function renderCards(list){
+      cardsContainer.innerHTML = '';
+      if(!list || list.length === 0){
+        emptyMessage.style.display = 'block';
+        return;
+      }
+      emptyMessage.style.display = 'none';
 
-    <script>
-        // Variables y arreglo con al menos 6 elementos (uso de variables, arreglos)
-        let highlighted = false;
-        let titleAsc = true;
-        let valueAsc = true;
-        const items = [
-            { id: 1, title: 'Alfa', category: 'A', value: 12 },
-            { id: 2, title: 'Beta', category: 'B', value: 7 },
-            { id: 3, title: 'Gamma', category: 'A', value: 21 },
-            { id: 4, title: 'Delta', category: 'C', value: 5 },
-            { id: 5, title: 'Epsilon', category: 'B', value: 14 },
-            { id: 6, title: 'Zeta', category: 'C', value: 9 },
-            { id: 7, title: 'Eta', category: 'A', value: 18 },
-            { id: 8, title: 'Theta', category: 'B', value: 3 }
-        ];
-
-        // Estado local para mostrar (se puede filtrar/ordenar sin perder el original)
-        let viewItems = [...items];
-
-        // Referencias DOM
-        const cardsContainer = document.getElementById('cardsContainer');
-        const emptyMessage = document.getElementById('emptyMessage');
-        const filterSelect = document.getElementById('filterCategory');
-
-        // Inicializar opciones de filtro basadas en categorías reales (DOM manipulation)
-        function initFilterOptions() {
-            const cats = Array.from(new Set(items.map(i => i.category))).sort();
-            cats.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.textContent = 'Categoría ' + cat;
-                filterSelect.appendChild(opt);
-            });
-        }
-
-        // Función para renderizar las tarjetas (manipulación del DOM)
-        function renderCards(list) {
-            cardsContainer.innerHTML = ''; // limpiamos
-            if (!list || list.length === 0) {
-                emptyMessage.style.display = 'block';
-                return;
-            }
-            emptyMessage.style.display = 'none';
-
-            list.forEach(obj => {
-                const card = document.createElement('article');
-                card.className = 'card' + (highlighted ? ' highlight' : '');
-                card.setAttribute('role', 'listitem');
-                // Contenido
-                const title = document.createElement('div');
-                title.className = 'title';
-                title.textContent = obj.title;
-
-                const meta = document.createElement('div');
-                meta.className = 'meta';
-                meta.textContent = `Categoría ${obj.category} • Valor: ${obj.value}`;
-
-                const actions = document.createElement('div');
-                actions.style.marginTop = 'auto';
-                actions.style.display = 'flex';
-                actions.style.gap = '8px';
-                const btnInvert = document.createElement('button');
-                btnInvert.className = 'button secondary';
-                btnInvert.textContent = 'Invertir valor';
-                btnInvert.addEventListener('click', () => {
-                    // condicional: solo invertir si value > 0
-                    if (obj.value > 0) {
-                        obj.value = -obj.value;
-                    } else {
-                        obj.value = Math.abs(obj.value);
-                    }
-                    renderCards(viewItems);
-                });
-
-                actions.appendChild(btnInvert);
-
-                card.appendChild(title);
-                card.appendChild(meta);
-                card.appendChild(actions);
-
-                cardsContainer.appendChild(card);
-            });
-        }
-
-        // Ordenar por título (función que modifica viewItems)
-        function sortByTitle() {
-            viewItems.sort((a, b) => {
-                if (a.title < b.title) return titleAsc ? -1 : 1;
-                if (a.title > b.title) return titleAsc ? 1 : -1;
-                return 0;
-            });
-            titleAsc = !titleAsc; 
-            renderCards(viewItems);
-        }
-
-        // Ordenar por valor numérico
-        function sortByValue() {
-            viewItems.sort((a, b) => valueAsc ? a.value - b.value : b.value - a.value);
-            valueAsc = !valueAsc;
-            renderCards(viewItems);
-        }
-
-        // Filtrar por categoría
-        function filterByCategory(category) {
-            if (category === 'all') {
-                viewItems = [...items];
-            } else {
-                viewItems = items.filter(it => it.category === category);
-            }
-            renderCards(viewItems);
-        }
-
-        // Alternar resaltado (toggle)
-        function toggleHighlight() {
-            highlighted = !highlighted;
-            renderCards(viewItems);
-        }
-
-        // Restablecer todo
-        function resetView() {
-            highlighted = false;
-            titleAsc = true;
-            valueAsc = true;
-            filterSelect.value = 'all';
-            viewItems = [...items];
-            renderCards(viewItems);
-        }
-
-        // Bind de eventos
-        document.getElementById('toggleHighlight').addEventListener('click', toggleHighlight);
-        document.getElementById('sortTitle').addEventListener('click', sortByTitle);
-        document.getElementById('sortValue').addEventListener('click', sortByValue);
-        document.getElementById('resetBtn').addEventListener('click', resetView);
-        filterSelect.addEventListener('change', (e) => filterByCategory(e.target.value));
-
-        initFilterOptions(); // Inicialización al cargar la página
-        resetView(); // renderiza inicialmente todos los elementos
-
-        cardsContainer.addEventListener('click', (e) => {
-            const card = e.target.closest('.card');
-            if (!card) return;
-            if (!e.target.matches('button')) {
-                if (window.confirm('¿Ver detalles de esta tarjeta?')) {
-                    const t = card.querySelector('.title').textContent;
-                    alert('Detalles: ' + t);
-                }
-            }
+      list.forEach(obj => {
+        const card = document.createElement('article');
+        card.className = 'card' + (highlighted ? ' highlight' : '');
+        const title = document.createElement('div');
+        title.className = 'title';
+        title.textContent = obj.title;
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = `Cat ${obj.category} • ${obj.value}`;
+        const actions = document.createElement('div');
+        actions.style.marginTop = 'auto';
+        const btnInvert = document.createElement('button');
+        btnInvert.className = 'button secondary';
+        btnInvert.textContent = 'Invertir valor';
+        btnInvert.addEventListener('click', () => {
+          obj.value = obj.value > 0 ? -obj.value : Math.abs(obj.value);
+          renderCards(viewItems);
         });
-    </script>
-</body>
+        actions.appendChild(btnInvert);
+        card.appendChild(title);
+        card.appendChild(meta);
+        card.appendChild(actions);
+        cardsContainer.appendChild(card);
+      });
+    }
 
+    function sortByValue(){
+      viewItems.sort((a,b) => valueAsc ? a.value - b.value : b.value - a.value);
+      valueAsc = !valueAsc;
+      renderCards(viewItems);
+    }
+
+    function filterByCategory(cat){
+      viewItems = cat === 'all' ? [...items] : items.filter(i => i.category === cat);
+      renderCards(viewItems);
+    }
+
+    function toggleHighlight(){ highlighted = !highlighted; renderCards(viewItems); }
+
+    document.getElementById('toggleHighlight').addEventListener('click', toggleHighlight);
+    document.getElementById('sortValue').addEventListener('click', sortByValue);
+    filterSelect.addEventListener('change', (e) => filterByCategory(e.target.value));
+
+    initFilterOptions();
+    renderCards(viewItems);
+  </script>
+</body>
 </html>

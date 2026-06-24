@@ -6,13 +6,13 @@
   <title>Personas - Formulario y Tabla</title>
   <link rel="stylesheet" href="estilos.css" />
 </head>
-<body>
-  <header class="header">
-    <h1>Personas</h1>
-    <nav><a href="index.html"> Volver al índice</a></nav>
+<body class="page">
+  <header class="site-header">
+    <h1>Ejercicio 2 — Personas (JS)</h1>
+    <nav><a href="index.html">← Volver al índice</a></nav>
   </header>
 
-  <main class="container">
+  <main class="container" style="justify-content:flex-start;">
     <section class="cardd">
       <h2>Añadir persona</h2>
       <form id="personForm">
@@ -34,43 +34,34 @@
 
     <section class="cardd">
       <h2>Lista de personas</h2>
-      <table id="peopleTable">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Edad</th>
-            <th>Altura (m)</th>
-            <th>Peso (kg)</th>
-            <th>IMC</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- filas generadas por JS -->
-        </tbody>
-      </table>
+      <div class="table-wrap" style="margin-top:8px;">
+        <table id="peopleTable">
+          <thead>
+            <tr>
+              <th>Nombre</th><th>Apellido</th><th>Edad</th><th>Altura (m)</th><th>Peso (kg)</th><th>IMC</th><th>Acción</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
   </main>
 
-  <footer class="footer">Ejercicio simple • HTML, CSS y JavaScript (DOM y eventos)</footer>
+  <footer class="site-footer">Personas (JS) • Formulario, tabla, IMC</footer>
 
   <script>
-    // Arreglo donde guardamos las personas
     let people = [];
 
     const form = document.getElementById('personForm');
     const tbody = document.querySelector('#peopleTable tbody');
     const clearBtn = document.getElementById('clearBtn');
 
-    // Función para calcular IMC y formatearlo a 2 decimales
     function calcularIMC(peso, altura){
-      if (!altura || altura <= 0) return '—';
+      if(!altura || altura <= 0) return '—';
       const imc = peso / (altura * altura);
       return imc.toFixed(2);
     }
 
-    // Renderizar la tabla desde el arreglo people
     function renderTable(){
       tbody.innerHTML = '';
       if(people.length === 0){
@@ -94,7 +85,6 @@
       });
     }
 
-    // Manejo del submit del formulario: agregar persona
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const nombre = document.getElementById('nombre').value.trim();
@@ -103,25 +93,18 @@
       const altura = parseFloat(document.getElementById('altura').value);
       const peso = parseFloat(document.getElementById('peso').value);
 
-      // Validación simple
       if(!nombre || !apellido || Number.isNaN(edad) || Number.isNaN(altura) || Number.isNaN(peso) || altura <= 0 || peso <= 0){
         alert('Completa todos los campos correctamente.');
         return;
       }
 
-      // Crear objeto persona con id simple
-      const persona = {
-        id: Date.now().toString(), // id único rápido
-        nombre, apellido, edad, altura, peso
-      };
-
+      const persona = { id: Date.now().toString(), nombre, apellido, edad, altura, peso };
       people.push(persona);
       renderTable();
       form.reset();
       document.getElementById('nombre').focus();
     });
 
-    // Delegación de eventos para eliminar fila
     tbody.addEventListener('click', (e) => {
       if(e.target && e.target.matches('.delete')){
         const id = e.target.dataset.id;
@@ -130,10 +113,8 @@
       }
     });
 
-    // Botón limpiar: vacía el formulario
     clearBtn.addEventListener('click', () => form.reset());
 
-    // Render inicial
     renderTable();
   </script>
 </body>
