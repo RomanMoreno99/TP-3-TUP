@@ -7,8 +7,18 @@
 }
 
 /* reset / base */
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: var(--bg); color: #111; }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: #111;
+}
 
 /* page-level layout used por algunas páginas */
 body.page {
@@ -28,7 +38,10 @@ body.page {
 }
 
 .site-header a,
-.header a { color: var(--accent); text-decoration: none; }
+.header a {
+  color: var(--accent);
+  text-decoration: none;
+}
 
 /* container / layout */
 .container {
@@ -47,14 +60,17 @@ body.page {
 .panel {
   background: var(--card);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(2,6,23,0.06);
+  box-shadow: 0 1px 3px rgba(2, 6, 23, 0.06);
   padding: 16px;
   flex: 1 1 320px;
   min-width: 260px;
 }
 
 /* pequeños ajustes para la variante cardd (formularios) */
-.cardd { flex: 1 1 400px; min-width: 280px; }
+.cardd {
+  flex: 1 1 400px;
+  min-width: 280px;
+}
 
 /* helpers de contenido */
 .controls {
@@ -66,12 +82,24 @@ body.page {
   padding: 16px;
 }
 
-.row { display:flex; gap:8px; margin-bottom:8px; }
-.row input { flex:1; padding:8px; border-radius:6px; border:1px solid #e2eefc; }
+.row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.row input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #e2eefc;
+}
 
 /* inputs / botones (nombres usados en tus HTML: .input, .btn, .button) */
 .input,
-input, select, textarea {
+input,
+select,
+textarea {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #dbe7f7;
@@ -99,38 +127,68 @@ input, select, textarea {
 }
 
 /* tabla */
-.table-wrap { overflow:auto; padding:12px; border-radius:8px; background:var(--card); }
-table { width:100%; border-collapse:collapse; margin-top:8px; }
-th, td { padding:8px; border-bottom:1px solid #f1f6ff; text-align:left; }
-.empty { color:var(--muted); text-align:center; padding:12px; }
+.table-wrap {
+  overflow: auto;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--card);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+th,
+td {
+  padding: 8px;
+  border-bottom: 1px solid #f1f6ff;
+  text-align: left;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 12px;
+}
 
 /* tarjetas pequeñas (ejercicio flexbox) */
 .cards {
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:12px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
 }
+
 .card.small,
 .card {
-  background:#fff;
-  border-radius:8px;
-  padding:12px;
-  box-shadow:0 1px 2px rgba(2,6,23,0.06);
-  flex:1 1 140px;
-  min-width:120px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 2px rgba(2, 6, 23, 0.06);
+  flex: 1 1 140px;
+  min-width: 120px;
   transition: transform .18s, box-shadow .18s;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
 .card.highlight {
   transform: translateY(-6px);
-  box-shadow: 0 8px 24px rgba(31,111,235,0.16);
-  border: 2px solid rgba(31,111,235,0.12);
+  box-shadow: 0 8px 24px rgba(31, 111, 235, 0.16);
+  border: 2px solid rgba(31, 111, 235, 0.12);
 }
-.card .meta { font-size:13px; color:var(--muted); }
-.card .title { font-weight:600; }
+
+.card .meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.card .title {
+  font-weight: 600;
+}
 
 /* footer */
 .site-footer,
@@ -144,7 +202,16 @@ th, td { padding:8px; border-bottom:1px solid #f1f6ff; text-align:left; }
 
 /* responsive */
 @media (max-width: 600px) {
-  .row { flex-direction: column; }
-  .container { padding: 0 10px; }
-  .card, .cardd { width: 100%; }
+  .row {
+    flex-direction: column;
+  }
+
+  .container {
+    padding: 0 10px;
+  }
+
+  .card,
+  .cardd {
+    flex: 1 1 100%;
+  }
 }
